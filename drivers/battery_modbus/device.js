@@ -23,7 +23,7 @@ class BatteryDevice extends BaseDevice {
 
       this.setCapabilityValue('meter_power.charged', data['0x120'].value),
       this.setCapabilityValue('meter_power.discharged', data['0x122'].value),
-      this.setCapabilityValue('meter_power.grid', data['0x124'].value),
+      this.setCapabilityValue('meter_power.grid', data['0x124'].value * -1),
     ]);
   }
 
