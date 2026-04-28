@@ -6,11 +6,31 @@ import { formatBit } from '../../utils/formatBit';
 import { ModbusResult } from '../../modbus/reader';
 import config from './driver.compose.json';
 
+const REG_DISPATCH_ENABLED = '0x880';
+const REG_DISPATCH_MODE = '0x885';
+const REG_DISPATCH_SOC = '0x886';
+const SOC_FACTOR = 0.4;
+
 class BatteryDevice extends ModbusBaseDevice {
 
   async onInit() {
     await this.checkCapabilites(config.capabilities);
     await super.onInit();
+
+    this.registerCapabilityListener('dispatch_enabled', async (val: boolean) => {
+      this.log('Set dispatch_enabled to', val);
+      await this.emitter?.write(REG_DISPATCH_ENABLED, val ? 1 : 0);
+    });
+
+    this.registerCapabilityListener('dispatch_mode', async (val: string) => {
+      this.log('Set dispatch_mode to', val);
+      await this.emitter?.write(REG_DISPATCH_MODE, parseInt(val, 10));
+    });
+
+    this.registerCapabilityListener('dispatch_soc', async (val: number) => {
+      this.log('Set dispatch_soc to', val);
+      await this.emitter?.write(REG_DISPATCH_SOC, Math.round(val / SOC_FACTOR));
+    });
   }
 
   async setCapabilities(data: ModbusResult) {
@@ -27,6 +47,10 @@ class BatteryDevice extends ModbusBaseDevice {
       this.setCapabilityValue('meter_power.charged', data['0x120'].value),
       this.setCapabilityValue('meter_power.discharged', data['0x122'].value),
       this.setCapabilityValue('meter_power.grid', data['0x124'].value),
+
+      this.setCapabilityValue('dispatch_enabled', data[REG_DISPATCH_ENABLED]?.value === 1),
+      this.setCapabilityValue('dispatch_mode', data[REG_DISPATCH_MODE]?.value != null ? String(data[REG_DISPATCH_MODE].value) : null),
+      this.setCapabilityValue('dispatch_soc', data[REG_DISPATCH_SOC]?.value),
     ]);
   }
 

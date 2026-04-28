@@ -23,7 +23,10 @@
     "meter_power.charged",
     "meter_power.discharged",
     "meter_power.grid",
-    "battery_charging_state"
+    "battery_charging_state",
+    "dispatch_enabled",
+    "dispatch_mode",
+    "dispatch_soc"
   ],
   "capabilitiesOptions": {
     "alpha_fault_text.warning": {

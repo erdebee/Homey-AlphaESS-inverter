@@ -12,6 +12,7 @@ type Register = {
   type: 'string' | 'uint16be' | 'int16be' | 'uint32be' | 'int32be',
   len: number,
   factor: number,
+  rw?: boolean,
   bits?: string[],
   enum?: {
     value: number,
@@ -135,6 +136,33 @@ export class ModbusReader {
       };
 
       socket.connect(options);
+    });
+  }
+
+  async writeOnce(register: string, value: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const socket = new Socket();
+      const client = new ModbusTCPClient(socket, UNIT_ID);
+
+      socket.on('error', reject);
+
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      socket.on('connect', async () => {
+        try {
+          // eslint-disable-next-line radix
+          await client.writeSingleRegister(parseInt(register), value);
+          resolve();
+        } catch (e) {
+          reject(e);
+        } finally {
+          socket.destroy();
+        }
+      });
+
+      socket.connect({
+        host: this.host,
+        port: this.port,
+      });
     });
   }
 
