@@ -16,11 +16,6 @@
   },
   "getable": true,
   "setable": true,
-  "uiComponent": "toggle",
-  "insightsTitleTrue": {
-    "en": "Dispatch mode enabled"
-  },
-  "insightsTitleFalse": {
-    "en": "Dispatch mode disabled"
-  }
+  "uiComponent": "sensor",
+  "icon": "/assets/icons/mode.svg"  
 }

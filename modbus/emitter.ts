@@ -22,6 +22,7 @@ export default class ModbusEventEmitter extends EventEmitter {
   stop() {
     clearInterval(this.pollingTask);
     this.pollingTask = undefined;
+    this.reader.close();
   }
 
   start(interval = INTERVAL) {
