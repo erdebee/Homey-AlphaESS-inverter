@@ -2,6 +2,7 @@
 
 import { Driver } from 'homey';
 import { ModbusReader, ModbusResult } from '../modbus/reader';
+import { getExistingEmitter } from './baseModbusDevice';
 
 export default class BaseDriver extends Driver {
 
@@ -38,6 +39,14 @@ export default class BaseDriver extends Driver {
     const port = this.homey.settings.get('port');
 
     this.log('Connecting to', host, port);
+
+    // Reuse existing shared connection if available (inverter only allows one TCP connection)
+    const emitterName = `${host.toLowerCase()}:${port}`;
+    const existingEmitter = getExistingEmitter(emitterName);
+    if (existingEmitter) {
+      this.log('Reusing existing shared connection for pairing');
+      return existingEmitter.readOnce();
+    }
 
     const reader = new ModbusReader(host, port);
     try {

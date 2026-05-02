@@ -45,6 +45,10 @@ async function destroyInstance(name: string) {
   }
 }
 
+export function getExistingEmitter(name: string): ModbusEventEmitter | undefined {
+  return EMITTERS[name]?.instance;
+}
+
 export default class ModbusBaseDevice extends Device {
 
   emitter?: ModbusEventEmitter;

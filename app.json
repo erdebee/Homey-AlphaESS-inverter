@@ -965,6 +965,44 @@
             "step": 1
           }
         ]
+      },
+      {
+        "id": "set_panels_onoff",
+        "title": {
+          "en": "Turn solar panels on or off",
+          "nl": "Zet zonnepanelen aan of uit"
+        },
+        "titleFormatted": {
+          "en": "Turn solar panels [[onoff]]",
+          "nl": "Zet zonnepanelen [[onoff]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=panels_modbus"
+          },
+          {
+            "type": "dropdown",
+            "name": "onoff",
+            "values": [
+              {
+                "id": "true",
+                "label": {
+                  "en": "On",
+                  "nl": "Aan"
+                }
+              },
+              {
+                "id": "false",
+                "label": {
+                  "en": "Off",
+                  "nl": "Uit"
+                }
+              }
+            ]
+          }
+        ]
       }
     ],
     "triggers": [
@@ -1094,6 +1132,30 @@
             "filter": "driver_id=grid_modbus"
           }
         ]
+      },
+      {
+        "id": "panels_onoff_changed",
+        "title": {
+          "en": "Solar panels turned on or off",
+          "nl": "Zonnepanelen aan- of uitgezet"
+        },
+        "tokens": [
+          {
+            "name": "onoff",
+            "type": "boolean",
+            "title": {
+              "en": "On",
+              "nl": "Aan"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=panels_modbus"
+          }
+        ]
       }
     ],
     "conditions": [
@@ -1196,6 +1258,24 @@
                 }
               }
             ]
+          }
+        ]
+      },
+      {
+        "id": "panels_is_on",
+        "title": {
+          "en": "Solar panels !{{are|aren't}} on",
+          "nl": "Zonnepanelen !{{zijn|zijn niet}} aan"
+        },
+        "titleFormatted": {
+          "en": "Solar panels !{{are|aren't}} on",
+          "nl": "Zonnepanelen !{{zijn|zijn niet}} aan"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=panels_modbus"
           }
         ]
       }
@@ -2523,6 +2603,7 @@
       },
       "class": "solarpanel",
       "capabilities": [
+        "onoff",
         "measure_power",
         "measure_power.ppv1",
         "measure_power.ppv2",

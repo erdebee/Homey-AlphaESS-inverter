@@ -39,6 +39,10 @@ export default class ModbusEventEmitter extends EventEmitter {
     this.pollingTask = setInterval(this.poll.bind(this), interval);
   }
 
+  async readOnce() {
+    return this.reader.readOnce();
+  }
+
   async poll() {
     try {
       const result = await this.reader.readOnce();

@@ -545,5 +545,29 @@
     "factor": 0.4,
     "frontend_type": "value",
     "rw": true
+  },
+  {
+    "register": "0x88A",
+    "name_en": "PV on/off",
+    "unit": "",
+    "type": "uint16be",
+    "len": 1,
+    "factor": 1,
+    "frontend_type": "enum",
+    "rw": true,
+    "enum": [
+      {
+        "value": 0,
+        "name_en": "On"
+      },
+      {
+        "value": 1,
+        "name_en": "On"
+      },
+      {
+        "value": 2,
+        "name_en": "Off"
+      }
+    ]
   }
 ]
