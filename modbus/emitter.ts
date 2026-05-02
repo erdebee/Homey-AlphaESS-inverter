@@ -19,6 +19,10 @@ export default class ModbusEventEmitter extends EventEmitter {
     return `${this.reader.host}:${this.reader.port}`;
   }
 
+  isPolling() {
+    return !!this.pollingTask;
+  }
+
   stop() {
     clearInterval(this.pollingTask);
     this.pollingTask = undefined;
@@ -27,7 +31,8 @@ export default class ModbusEventEmitter extends EventEmitter {
 
   start(interval = INTERVAL) {
     if (this.pollingTask) {
-      this.stop();
+      clearInterval(this.pollingTask);
+      this.pollingTask = undefined;
     }
 
     // eslint-disable-next-line homey-app/global-timers, @typescript-eslint/no-misused-promises

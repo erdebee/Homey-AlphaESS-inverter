@@ -40,7 +40,11 @@ export default class BaseDriver extends Driver {
     this.log('Connecting to', host, port);
 
     const reader = new ModbusReader(host, port);
-    return reader.readOnce();
+    try {
+      return await reader.readOnce();
+    } finally {
+      reader.close();
+    }
   }
 
 }
