@@ -52,8 +52,8 @@ export default class ModbusEventEmitter extends EventEmitter {
     }
   }
 
-  async write(register: string, value: number) {
-    await this.reader.writeOnce(register, value);
+  async write(register: string, value: number, len: number = 1) {
+    await this.reader.writeOnce(register, value, len);
     await this.poll();
   }
 

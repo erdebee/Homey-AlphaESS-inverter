@@ -41,6 +41,20 @@
           "title": { "en": "SOC" }
         }
       ]
+    },
+    {
+      "id": "dispatch_active_power_changed",
+      "title": {
+        "en": "Dispatch active power changed",
+        "nl": "Dispatch actief vermogen gewijzigd"
+      },
+      "tokens": [
+        {
+          "name": "dispatch_active_power",
+          "type": "number",
+          "title": { "en": "Power (W)" }
+        }
+      ]
     }
   ],
   "conditions": [
@@ -76,11 +90,33 @@
             { "id": "4", "label": { "en": "Maximise output" } },
             { "id": "5", "label": { "en": "Normal mode" } },
             { "id": "6", "label": { "en": "Optimise consumption" } },
-            { "id": "7", "label": { "en": "Maximise consumption (disable PV)" } },
+            { "id": "7", "label": { "en": "Maximise consumption" } },
             { "id": "8", "label": { "en": "Eco mode" } },
             { "id": "9", "label": { "en": "FCAS mode" } },
             { "id": "10", "label": { "en": "PV power setting" } }
           ]
+        }
+      ]
+    },
+    {
+      "id": "dispatch_active_power_is",
+      "title": {
+        "en": "Dispatch active power !{{is|isn't}} greater than [[power]] W",
+        "nl": "Dispatch actief vermogen !{{is|is niet}} groter dan [[power]] W"
+      },
+      "titleFormatted": {
+        "en": "Dispatch active power !{{is|isn't}} greater than [[power]] W",
+        "nl": "Dispatch actief vermogen !{{is|is niet}} groter dan [[power]] W"
+      },
+      "args": [
+        {
+          "type": "range",
+          "name": "power",
+          "min": -32000,
+          "max": 32000,
+          "step": 100,
+          "label": "W",
+          "labelDecimals": 0
         }
       ]
     }
@@ -128,7 +164,7 @@
             { "id": "4", "label": { "en": "Maximise output" } },
             { "id": "5", "label": { "en": "Normal mode" } },
             { "id": "6", "label": { "en": "Optimise consumption" } },
-            { "id": "7", "label": { "en": "Maximise consumption (disable PV)" } },
+            { "id": "7", "label": { "en": "Maximise consumption" } },
             { "id": "8", "label": { "en": "Eco mode" } },
             { "id": "9", "label": { "en": "FCAS mode" } },
             { "id": "10", "label": { "en": "PV power setting" } }
@@ -154,6 +190,28 @@
           "max": 100,
           "step": 1,
           "label": "%",
+          "labelDecimals": 0
+        }
+      ]
+    },
+    {
+      "id": "set_dispatch_active_power",
+      "title": {
+        "en": "Set dispatch active power",
+        "nl": "Stel dispatch actief vermogen in"
+      },
+      "titleFormatted": {
+        "en": "Set dispatch active power to [[power]] W",
+        "nl": "Stel dispatch actief vermogen in op [[power]] W"
+      },
+      "args": [
+        {
+          "type": "range",
+          "name": "power",
+          "min": -32000,
+          "max": 32000,
+          "step": 100,
+          "label": "W",
           "labelDecimals": 0
         }
       ]

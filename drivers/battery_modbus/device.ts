@@ -7,9 +7,11 @@ import { ModbusResult } from '../../modbus/reader';
 import config from './driver.compose.json';
 
 const REG_DISPATCH_ENABLED = '0x880';
+const REG_DISPATCH_ACTIVE_POWER = '0x881';
 const REG_DISPATCH_MODE = '0x885';
 const REG_DISPATCH_SOC = '0x886';
 const SOC_FACTOR = 0.4;
+const ACTIVE_POWER_OFFSET = 32000;
 
 class BatteryDevice extends ModbusBaseDevice {
 
@@ -28,6 +30,11 @@ class BatteryDevice extends ModbusBaseDevice {
     await this.setCapabilityValue('dispatch_soc', val);
   }
 
+  async setDispatchActivePower(val: number) {
+    await this.emitter?.write(REG_DISPATCH_ACTIVE_POWER, val + ACTIVE_POWER_OFFSET, 2);
+    await this.setCapabilityValue('dispatch_active_power', val);
+  }
+
   async onInit() {
     await this.checkCapabilites(config.capabilities);
     await super.onInit();
@@ -35,6 +42,7 @@ class BatteryDevice extends ModbusBaseDevice {
     this.registerCapabilityListener('dispatch_enabled', (val: boolean) => this.setDispatchEnabled(val));
     this.registerCapabilityListener('dispatch_mode', (val: string) => this.setDispatchMode(val));
     this.registerCapabilityListener('dispatch_soc', (val: number) => this.setDispatchSoc(val));
+    this.registerCapabilityListener('dispatch_active_power', (val: number) => this.setDispatchActivePower(val));
   }
 
   async setCapabilities(data: ModbusResult) {
@@ -42,7 +50,7 @@ class BatteryDevice extends ModbusBaseDevice {
       try {
         const prev = this.getCapabilityValue(cap);
         await this.setCapabilityValue(cap, val as never);
-        if (prev !== val && (cap === 'dispatch_enabled' || cap === 'dispatch_mode' || cap === 'dispatch_soc')) {
+        if (prev !== val && (cap === 'dispatch_enabled' || cap === 'dispatch_mode' || cap === 'dispatch_soc' || cap === 'dispatch_active_power')) {
           await this.homey.flow
             .getDeviceTriggerCard(`${cap}_changed`)
             .trigger(this, { [cap]: val }, {})
@@ -70,6 +78,7 @@ class BatteryDevice extends ModbusBaseDevice {
       safeSet('dispatch_enabled', data[REG_DISPATCH_ENABLED]?.value === 1),
       safeSet('dispatch_mode', data[REG_DISPATCH_MODE]?.value != null ? String(data[REG_DISPATCH_MODE].value) : null),
       safeSet('dispatch_soc', data[REG_DISPATCH_SOC]?.value),
+      safeSet('dispatch_active_power', data[REG_DISPATCH_ACTIVE_POWER]?.value != null ? (data[REG_DISPATCH_ACTIVE_POWER].value as number) - ACTIVE_POWER_OFFSET : null),
     ]);
   }
 

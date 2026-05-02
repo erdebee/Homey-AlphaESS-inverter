@@ -7,6 +7,7 @@ type BatteryDeviceLike = {
   setDispatchEnabled(v: boolean): Promise<void>;
   setDispatchMode(v: string): Promise<void>;
   setDispatchSoc(v: number): Promise<void>;
+  setDispatchActivePower(v: number): Promise<void>;
   getCapabilityValue(cap: string): unknown;
 };
 
@@ -32,6 +33,11 @@ class BatteryDriver extends BaseDriver {
         await args.device.setDispatchSoc(args.soc);
       });
 
+    this.homey.flow.getActionCard('set_dispatch_active_power')
+      .registerRunListener(async (args: { device: BatteryDeviceLike, power: number }) => {
+        await args.device.setDispatchActivePower(args.power);
+      });
+
     this.homey.flow.getConditionCard('dispatch_enabled_is')
       .registerRunListener(async (args: { device: BatteryDeviceLike }) => {
         return args.device.getCapabilityValue('dispatch_enabled') === true;
@@ -40,6 +46,11 @@ class BatteryDriver extends BaseDriver {
     this.homey.flow.getConditionCard('dispatch_mode_is')
       .registerRunListener(async (args: { device: BatteryDeviceLike, mode: string }) => {
         return args.device.getCapabilityValue('dispatch_mode') === args.mode;
+      });
+
+    this.homey.flow.getConditionCard('dispatch_active_power_is')
+      .registerRunListener(async (args: { device: BatteryDeviceLike, power: number }) => {
+        return (args.device.getCapabilityValue('dispatch_active_power') as number) > args.power;
       });
   }
 

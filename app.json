@@ -869,7 +869,7 @@
               {
                 "id": "7",
                 "label": {
-                  "en": "Maximise consumption (disable PV)"
+                  "en": "Maximise consumption"
                 }
               },
               {
@@ -917,6 +917,33 @@
             "max": 100,
             "step": 1,
             "label": "%",
+            "labelDecimals": 0
+          }
+        ]
+      },
+      {
+        "id": "set_dispatch_active_power",
+        "title": {
+          "en": "Set dispatch active power",
+          "nl": "Stel dispatch actief vermogen in"
+        },
+        "titleFormatted": {
+          "en": "Set dispatch active power to [[power]] W",
+          "nl": "Stel dispatch actief vermogen in op [[power]] W"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=battery_modbus"
+          },
+          {
+            "type": "range",
+            "name": "power",
+            "min": -32000,
+            "max": 32000,
+            "step": 100,
+            "label": "W",
             "labelDecimals": 0
           }
         ]
@@ -1064,6 +1091,29 @@
             "type": "number",
             "title": {
               "en": "SOC"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=battery_modbus"
+          }
+        ]
+      },
+      {
+        "id": "dispatch_active_power_changed",
+        "title": {
+          "en": "Dispatch active power changed",
+          "nl": "Dispatch actief vermogen gewijzigd"
+        },
+        "tokens": [
+          {
+            "name": "dispatch_active_power",
+            "type": "number",
+            "title": {
+              "en": "Power (W)"
             }
           }
         ],
@@ -1236,7 +1286,7 @@
               {
                 "id": "7",
                 "label": {
-                  "en": "Maximise consumption (disable PV)"
+                  "en": "Maximise consumption"
                 }
               },
               {
@@ -1258,6 +1308,33 @@
                 }
               }
             ]
+          }
+        ]
+      },
+      {
+        "id": "dispatch_active_power_is",
+        "title": {
+          "en": "Dispatch active power !{{is|isn't}} greater than [[power]] W",
+          "nl": "Dispatch actief vermogen !{{is|is niet}} groter dan [[power]] W"
+        },
+        "titleFormatted": {
+          "en": "Dispatch active power !{{is|isn't}} greater than [[power]] W",
+          "nl": "Dispatch actief vermogen !{{is|is niet}} groter dan [[power]] W"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=battery_modbus"
+          },
+          {
+            "type": "range",
+            "name": "power",
+            "min": -32000,
+            "max": 32000,
+            "step": 100,
+            "label": "W",
+            "labelDecimals": 0
           }
         ]
       },
@@ -1429,7 +1506,8 @@
         "battery_charging_state",
         "dispatch_enabled",
         "dispatch_mode",
-        "dispatch_soc"
+        "dispatch_soc",
+        "dispatch_active_power"
       ],
       "capabilitiesOptions": {
         "alpha_fault_text.warning": {
@@ -3006,6 +3084,34 @@
       ],
       "icon": "/assets/icons/mode.svg"
     },
+    "dispatch_active_power": {
+      "type": "number",
+      "title": {
+        "en": "Dispatch Active Power",
+        "nl": "Dispatch actief vermogen",
+        "da": "Dispatch aktiv effekt",
+        "de": "Dispatch Wirkleistung",
+        "es": "Potencia activa de despacho",
+        "fr": "Puissance active dispatch",
+        "it": "Potenza attiva dispatch",
+        "no": "Dispatch aktiv effekt",
+        "sv": "Dispatch aktiv effekt",
+        "pl": "Moc czynna dispatch",
+        "ru": "Активная мощность диспетчеризации",
+        "ko": "디스패치 유효 전력"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/icons/spark.svg",
+      "units": {
+        "en": "W"
+      },
+      "min": -32000,
+      "max": 32000,
+      "step": 1,
+      "decimals": 0
+    },
     "dispatch_enabled": {
       "type": "boolean",
       "title": {
@@ -3087,7 +3193,7 @@
         {
           "id": "7",
           "title": {
-            "en": "Maximise consumption (disable PV)"
+            "en": "Maximise consumption"
           }
         },
         {

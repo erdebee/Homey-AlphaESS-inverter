@@ -231,12 +231,19 @@ export class ModbusReader {
     }
   }
 
-  async writeOnce(register: string, value: number): Promise<void> {
+  async writeOnce(register: string, value: number, len: number = 1): Promise<void> {
     const unlock = await this.mutex.lock();
     try {
       const client = await this.getClient();
       // eslint-disable-next-line radix
-      await client.writeSingleRegister(parseInt(register), value);
+      const addr = parseInt(register);
+      if (len > 1) {
+        const buf = Buffer.alloc(len * 2);
+        buf.writeInt32BE(value, 0);
+        await client.writeMultipleRegisters(addr, buf);
+      } else {
+        await client.writeSingleRegister(addr, value);
+      }
     } catch (e) {
       this.resetConnection();
       throw e;
